@@ -1,16 +1,17 @@
 const sqlite3 = require('sqlite3').verbose();
 const csvReader = require('./csvReader');
 
-function DataLayer() {
-    const sortByOptions = ['confirmed', 'recovered', 'death'];
+module.exports = function () {
+    const orderByOptions = ['confirmed', 'recovered', 'death'];
 
     const db = new sqlite3.Database(':memory:');
+    initAndSeed();
 
     return Object.freeze({
         getCountries,
         getCountryCases,
         getRegions,
-        initAndSeed,
+
         close: () => db.close(),
     });
 
@@ -41,9 +42,8 @@ function DataLayer() {
         take = 10,
         region_id,
 
-        sortBy,
-
-        descending = true,
+        orderBy,
+        desc,
 
         onResult,
     }) {
@@ -56,8 +56,8 @@ function DataLayer() {
 
         sql += ` GROUP BY country`;
 
-        if (sortBy && sortByOptions.includes(sortBy))
-            sql += ` ORDER BY ${sortBy} ${descending ? 'DESC' : 'ASC'}`;
+        if (orderBy && orderByOptions.includes(orderBy))
+            sql += ` ORDER BY ${orderBy} ${desc ? 'DESC' : 'ASC'}`;
 
         sql += ` LIMIT ?  OFFSET ?;`
 
@@ -97,8 +97,6 @@ function DataLayer() {
             seed()
         });
 
-
-
         function seed() {
             const seedData = csvReader('./../data.csv');
             const regions = onlyUniqe(seedData, 'region');
@@ -128,5 +126,3 @@ function DataLayer() {
         }
     }
 }
-
-module.exports = DataLayer();

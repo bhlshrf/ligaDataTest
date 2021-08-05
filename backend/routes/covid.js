@@ -1,27 +1,42 @@
-const router = require('express').Router();
 
-const covidController = require('../controllers/covid')(db);
+module.exports = function (db) {
 
-router.get('/data', (req, res) => {
-    const {
-        page,
-        region,
-        descending,
-        sortBy,
-        limit
-    } = req.params;
+    const router = require('express').Router();
 
-    const countryList = covidController.getCountries({
-        page,
-        region,
-        descending,
-        sortBy,
-        limit,
-    });
+    router.get('/countries', (req, res) => {
+        const {
+            page = 1,
+            limit = 10,
 
-    res.status(200).send(countryList);
-})
+            orderBy,
+            desc,
 
-router.get('/api/status', (req, res) => res.send({ status: 'working' }));
+            region_id,
+        } = req.query;
 
-module.exports = router;
+        db.getCountries({
+            region_id,
+            take: limit,
+            skip: (page - 1) * limit,
+            orderBy,
+            desc: desc.toLowerCase() == 'true',
+            onResult: countries => res.status(200).send(countries),
+        });
+    })
+
+
+    router.get('/countries/:id/cases', (req, res) => {
+        db.getCountryCases({
+            country_id: req.params.id,
+            onResult: (cases) => res.status(200).send(cases),
+        });
+    })
+
+    router.get('/regions', (req, res) => {
+        db.getRegions({
+            onResult: (regions) => res.status(200).send(regions),
+        });
+    })
+
+    return router;
+}

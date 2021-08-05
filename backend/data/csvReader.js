@@ -1,5 +1,11 @@
+
+module.exports = function (path) {
+    const data = readCsvFile(path);
+    const groupedData = groupValuesByCountryAndDate(data);
+    return removeRedundantProperties(groupedData);
+}
+
 const fs = require('fs');
-const readline = require('readline');
 
 function readCsvFile(path) {
     return fs.readFileSync(path)
@@ -49,8 +55,3 @@ function removeRedundantProperties(arr) {
     return arr;
 }
 
-module.exports = function (path) {
-    const data = readCsvFile(path);
-    const groupedData = groupValuesByCountryAndDate(data);
-    return removeRedundantProperties(groupedData);
-}
