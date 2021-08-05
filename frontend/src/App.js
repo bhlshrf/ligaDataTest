@@ -7,10 +7,25 @@ function App() {
   const [orderBy, setOrderBy] = useState('');
   const [desc, setDesc] = useState(false);
 
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
 
   const regions = useApi('/api/regions');
-  const countries = useApi(`/api/countries?region_id=${region}&orderBy=${orderBy}&desc=${desc}`);
+  const countries = useApi(`/api/countries?region_id=${region}` +
+    `&orderBy=${orderBy}&desc=${desc}&limit=${limit}&page=${page}`);
 
+
+  const nextPageAvailable = () => limit == countries.data.length;
+  const previousPageAvailable = () => page > 1;
+  const nextPage = () => {
+    if (nextPageAvailable())
+      setPage(page + 1)
+  }
+
+  const previousPage = () => {
+    if (previousPageAvailable())
+      setPage(page - 1)
+  }
 
   return (
     <div className="App">
@@ -46,6 +61,16 @@ function App() {
             </label>
 
           }
+
+          <select onChange={v => setLimit(v.target.value)}>
+            <option value='5'>5</option>
+            <option selected value='10'>10</option>
+            <option value='20'>20</option>
+          </select>
+
+          <button onClick={previousPage} disabled={!previousPageAvailable()}> Previous Page </button>
+          current page: {page}
+          <button onClick={nextPage} disabled={!nextPageAvailable()}> Next Page </button>
 
         </div>
         <hr />
