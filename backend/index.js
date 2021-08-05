@@ -1,11 +1,10 @@
 const app = require('express')();
+
+const db = require('./data/db');
 const covidRoute = require('./routes/covid');
 
 
-app.use(express.urlencoded({ extended: true }));
-
 app.use('/api/covid', covidRoute);
-
 
 
 app.use((req, res, next) => {

@@ -7,6 +7,7 @@ function readCsvFile(path) {
         .split('\r\n')
         .slice(1)
         .filter(x => x.length > 0)
+        .map(x => x.replace('"', ''))
         .map(parseCsvFile);
 }
 

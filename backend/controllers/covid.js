@@ -2,6 +2,7 @@
 function controller(db) {
     return Object.freeze({
         getCountries,
+        getRegions,
     });
 
     function getCountries({

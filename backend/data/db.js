@@ -5,75 +5,127 @@ function DataLayer() {
     const sortByOptions = ['confirmed', 'recovered', 'death'];
 
     const db = new sqlite3.Database(':memory:');
-    // const seedData = csvReader('./../data.csv');
 
     return Object.freeze({
         getCountries,
-        init,
-        seed,
-        close,
-
+        getCountryCases,
+        getRegions,
+        initAndSeed,
+        close: () => db.close(),
     });
 
-    function init() {
-        db.run(`CREATE TABLE regions (id INTEGER PRIMARY KEY, region TEXT NOT NULL)`);
-
-        db.run(`CREATE TABLE countries (
-                id INTEGER PRIMARY KEY,
-                country TEXT NOT NULL,
-
-                region_id INTEGER,
-                FOREIGN KEY (region_id) REFERENCES regions (id) ON DELETE CASCADE,
-            )`);
-
-        db.run(`CREATE TABLE cases (
-                id INTEGER PRIMARY KEY,
-                date TEXT NOT NULL,
-
-                death INTEGER CHECH(death >= 0),
-                confirmed INTEGER CHECH(confirmed >= 0),
-                recovered INTEGER CHECH(recovered >= 0),
-
-                country_id INTEGER,
-                FOREIGN KEY (country_id) REFERENCES countries (id) ON DELETE CASCADE,
-            )`);
+    function getRegions({ onResult }) {
+        const sql = `SELECT * FROM regions`;
+        db.all(sql, [], (err, rows) => {
+            if (err) throw err;
+            onResult && onResult(rows);
+        });
     }
 
-    function seed() {
 
-        // var stmt = db.prepare('INSERT INTO lorem VALUES (?)');
-        // for (var i = 0; i < 10; i++) {
-        //     stmt.run("Ipsum " + i);
-        // }
-        // stmt.finalize();
-
-        // db.each("SELECT rowid AS id, info FROM lorem", function (err, row) {
-        //     console.log(row.id + ": " + row.info);
-        // });
-
+    function getCountryCases({ country_id, onResult }) {
+        const sql = `SELECT region, country, date, death, confirmed, recovered
+                     FROM cases 
+                     INNER JOIN countries ON countries.id = cases.country_id
+                     INNER JOIN regions ON countries.region_id = regions.id
+                     WHERE country_id = ?
+                     ORDER BY date ASC`;
+        db.all(sql, [country_id], (err, rows) => {
+            if (err) throw err;
+            onResult && onResult(rows);
+        });
     }
-
-    function close() {
-        db.close();
-    }
-
 
     function getCountries({
         skip = 0,
         take = 10,
-        region,
+        region_id,
 
         sortBy,
 
-        descending,
-    }) {
+        descending = true,
 
-        return [
-            { id: 1, country: 'Austria', date: '2021.03.01', death: 13, confirm: 20, recovery: 40 },
-            { id: 2, country: 'Austria', date: '2021.03.02', death: 20, confirm: 100, recovery: 50 },
-            { id: 3, country: 'Austria', date: '2021.03.03', death: 13, confirm: 20, recovery: 40 },
-            { id: 4, country: 'Austria', date: '2021.03.04', death: 3, confirm: 210, recovery: 420 },
-        ];
+        onResult,
+    }) {
+        let sql = `SELECT country, SUM(death) AS death, SUM(confirmed) AS confirmed, SUM(recovered) AS recovered
+                   FROM cases
+                   INNER JOIN countries ON cases.country_id = countries.id`;
+
+        if (region_id)
+            sql += ' WHERE region_id = ?';
+
+        sql += ` GROUP BY country`;
+
+        if (sortBy && sortByOptions.includes(sortBy))
+            sql += ` ORDER BY ${sortBy} ${descending ? 'DESC' : 'ASC'}`;
+
+        sql += ` LIMIT ?  OFFSET ?;`
+
+        db.all(sql,
+            region_id ? [region_id, take, skip] : [take, skip],
+            (err, rows) => {
+                if (err) throw err;
+                onResult && onResult(rows);
+            });
+    }
+
+
+    function initAndSeed() {
+        db.serialize(() => {
+            db.run(`CREATE TABLE regions (id INTEGER PRIMARY KEY, region TEXT NOT NULL)`);
+
+            db.run(`CREATE TABLE countries (
+                id INTEGER PRIMARY KEY,
+                country TEXT NOT NULL,
+
+                region_id INTEGER,
+                FOREIGN KEY (region_id) REFERENCES regions (id)
+            )`);
+
+            db.run(`CREATE TABLE cases (
+                id INTEGER PRIMARY KEY,
+                date TEXT NOT NULL,
+
+                death INTEGER CHECK(death >= 0),
+                confirmed INTEGER CHECK(confirmed >= 0),
+                recovered INTEGER CHECK(recovered >= 0),
+
+                country_id INTEGER,
+                FOREIGN KEY (country_id) REFERENCES countries (id)
+            )`);
+
+            seed()
+        });
+
+
+
+        function seed() {
+            const seedData = csvReader('./../data.csv');
+            const regions = onlyUniqe(seedData, 'region');
+
+            let country_id = 0, region_id = 0;
+            for (let i = 0; i < regions.length; i++) {
+                db.run(`INSERT INTO regions VALUES (${++region_id},"${regions[i]}")`);
+
+                for (const country of onlyUniqe(seedData.filter(x => x.region == regions[i]), 'country')) {
+                    db.run(`INSERT INTO countries VALUES (${++country_id},"${country}", ${region_id})`);
+
+                    seedCasesData(seedData, country_id, country);
+                }
+            }
+        }
+
+        function onlyUniqe(list, prop) {
+            return [...new Set(list.map(x => x[prop]))]
+        }
+
+        function seedCasesData(seedData, country_id, country) {
+            const values = seedData
+                .filter(x => x.country == country)
+                .map(x => `("${x.date}",${x.death},${x.confirmed},${x.recovered},${country_id})`)
+                .join(',');
+            db.run(`INSERT INTO cases(date,death,confirmed, recovered, country_id) VALUES ${values}`);
+        }
     }
 }
 
