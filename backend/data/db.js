@@ -12,6 +12,8 @@ module.exports = function () {
         getCountryCases,
         getRegions,
 
+        // getTotalCountryCount,
+
         close: () => db.close(),
     });
 
@@ -23,6 +25,12 @@ module.exports = function () {
         });
     }
 
+    function getCountryCount({
+        region_id,
+        onResult,
+    }) {
+
+    }
 
     function getCountryCases({ country_id, onResult }) {
         const sql = `SELECT region, country, date, death, confirmed, recovered
@@ -47,7 +55,7 @@ module.exports = function () {
 
         onResult,
     }) {
-        let sql = `SELECT country, SUM(death) AS death, SUM(confirmed) AS confirmed, SUM(recovered) AS recovered
+        let sql = `SELECT country, countries.id, SUM(death) AS death, SUM(confirmed) AS confirmed, SUM(recovered) AS recovered
                    FROM cases
                    INNER JOIN countries ON cases.country_id = countries.id`;
 
