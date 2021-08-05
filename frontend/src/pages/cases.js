@@ -5,7 +5,7 @@ import useApi from '../hooks/useApi';
 export default function Cases() {
     let history = useHistory();
     let { id } = useParams();
-    const { loading, error, data } = useApi(`/countries/${id}/cases`);
+    const { loading, error, data } = useApi(`/api/countries/${id}/cases`);
 
     return <div>
         <h2>Cases</h2>
@@ -14,7 +14,7 @@ export default function Cases() {
                 ? 'loading'
                 : error
                     ? 'error'
-                    : data?.map(x => <span key={x.id}>{x.date}</span>)
+                    : <ul>{data?.map(x => <li key={x.date}>{x.date}</li>)}</ul>
         }
         <button onClick={history.goBack}>Go Back</button>
     </div>;
