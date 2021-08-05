@@ -50,7 +50,9 @@
   display: inline-block;
 }
 
-.pagination {}
+.pagination {
+  display: inline-block;
+}
 
 .active {
   background-color: red;
