@@ -12,7 +12,7 @@ module.exports = function () {
         getCountryCases,
         getRegions,
 
-        // getTotalCountryCount,
+        getCountriesCount,
 
         close: () => db.close(),
     });
@@ -25,11 +25,21 @@ module.exports = function () {
         });
     }
 
-    function getCountryCount({
+    function getCountriesCount({
         region_id,
         onResult,
     }) {
+        let sql = 'SELECT COUNT(country) AS count FROM countries';
+        let params = [];
+        if (region_id) {
+            sql += ' WHERE region_id = ?';
+            params = [region_id];
+        }
 
+        db.get(sql, params, (err, row) => {
+            if (err) throw err;
+            onResult && onResult(row.count);
+        });
     }
 
     function getCountryCases({ country_id, onResult }) {

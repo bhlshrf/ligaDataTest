@@ -20,7 +20,15 @@ module.exports = function (db) {
             skip: (page - 1) * limit,
             orderBy,
             desc: desc?.toLowerCase() == 'true',
-            onResult: countries => res.status(200).send(countries),
+            onResult: countries => {
+                db.getCountriesCount({
+                    region_id,
+                    onResult: count => res.status(200).send({
+                        countries,
+                        totalCount: count,
+                    })
+                })
+            },
         });
     })
 
