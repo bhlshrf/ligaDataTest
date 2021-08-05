@@ -19,7 +19,7 @@ module.exports = function (db) {
             take: limit,
             skip: (page - 1) * limit,
             orderBy,
-            desc: desc.toLowerCase() == 'true',
+            desc: desc?.toLowerCase() == 'true',
             onResult: countries => res.status(200).send(countries),
         });
     })
