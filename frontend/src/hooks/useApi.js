@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+const axios = require('axios');
 
 const useApi = (url) => {
     const [loading, setLoading] = useState(false);
@@ -8,10 +9,8 @@ const useApi = (url) => {
 
     const refresh = () => {
         setLoading(true);
-        fetch(url)
-            .then(res => res.json())
-            .then(res => setData(res))
-            .then(res => setError(''))
+        axios.get(url)
+            .then(res => setData(res.data) && setError(''))
             .catch(err => setError(err.message || err.toString()))
             .finally(() => setLoading(false))
     }
