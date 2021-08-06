@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
+import CoronaDetails from '../../components/CoronaDetails';
 import LikableButton from '../../components/LikableButton';
 import Loading from '../../components/Loading';
 import RetryButton from '../../components/RetryButton';
@@ -12,26 +13,24 @@ export default function Cases() {
 
     if (error)
         return <RetryButton refresh={refresh} />
+
     if (!data)
-        return <Loading />;
+        return <Loading className='centered' />;
 
     return (
         <>
             <div className='cases-header'>
-                <Link className='return-link' to='/'> {'<'} Go Home</Link>
+                <Link className='return-link' to='/'> {'< '} Home</Link>
                 <h2>{data && data[0].country}</h2>
                 <LikableButton id={id} />
             </div>
-            <div className='centered cases-content'>
-                {data?.map(x =>
-                    <div key={x.date} className='row-container'>
-                        <span>{x.date}</span>
-                        <span>{x.death}</span>
-                        <span>{x.confirmed}</span>
-                        <span>{x.recovered}</span>
-                    </div>
-                )}
-            </div>
+            <CoronaDetails
+                items={data}
+                keys={x => x.date}
+                Labels={({ className, date }) => <span className={className}>{date}</span>}
+            />
         </>
     );
 }
+
+

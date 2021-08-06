@@ -8,7 +8,7 @@ export default function LikableButton({ id }) {
 
     return (
         <button className={liked ? 'btn liked' : 'btn'} onClick={() => setLiked(favorite.toggle(id))}>
-            {liked ? 'liked' : 'not liked'}
+            {liked ? 'Liked' : 'Click to Like'}
         </button>
     )
 }

@@ -1,16 +1,11 @@
-import { useState } from "react";
 import ReactPaginate from "react-paginate";
-import DropDown from "../../components/DropDown";
 import Loading from "../../components/Loading";
 import RetryButton from "../../components/RetryButton";
 import useApi from "../../hooks/useApi";
-import queryString from "../../util/quertString";
 import CountryList from "./CountryList";
 
 
 export default function PaginatedCountryList({ region, orderBy, desc, limit, page, setPage }) {
-    const query = queryString();
-
     const { error, data, refresh } = useApi(`/api/countries?region_id=${region}` +
         `&orderBy=${orderBy}&desc=${desc}&limit=${limit}&page=${page + 1}`);
 

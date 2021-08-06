@@ -1,16 +1,10 @@
 import { Link } from "react-router-dom";
+import CoronaDetails from "../../components/CoronaDetails";
 
-const CountryList = ({ items }) => (
-    <>
-        {
-            items.map(x => <div key={x.id} className='row-container'>
-                <Link to={`/cases/${x.id}`}> {x.country} </Link>
-                <span>{x.death}</span>
-                <span>{x.recovered}</span>
-                <span>{x.confirmed}</span>
-            </div>)
-        }
-    </>
-)
+const CountryList = ({ items }) => <CoronaDetails
+    items={items}
+    keys={x => x.id}
+    Labels={({ id, country, className }) => <Link to={`/cases/${id}`} className={className}> {country} </Link>}
+/>
 
 export default CountryList;
