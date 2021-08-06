@@ -1,18 +1,8 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import LikableButton from '../components/LikableButton';
+import RetryButton from '../components/RetryButton';
 import useApi from '../hooks/useApi';
-import { favorite } from '../util/favorite';
-
-
-const LikableButton = ({ id }) => {
-    const [liked, setLiked] = useState(favorite.includes(id));
-
-    return (
-        <button onClick={() => setLiked(favorite.toggle(id))}>
-            {liked ? 'liked' : 'not liked'}
-        </button>
-    )
-}
 
 export default function Cases() {
     let { id } = useParams();
@@ -20,9 +10,10 @@ export default function Cases() {
     const { error, data, refresh } = useApi(`/api/countries/${id}/cases`);
 
     if (error)
-        return <button onClick={refresh}>refresh</button>
+        return <RetryButton refresh={refresh} />
     if (!data)
-        return 'loading';
+        return <Loading />;
+
     return (
         <div>
             <h2>Cases {data && data[0].country}</h2>
