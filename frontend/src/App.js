@@ -12,7 +12,7 @@ export default function App() {
     <Router>
       <Switch>
         <Route path='/cases/:id' component={Cases} />
-        <Route path='/coutries' component={Countries} />
+        <Route path='/' component={Countries} />
       </Switch>
     </Router>
   );

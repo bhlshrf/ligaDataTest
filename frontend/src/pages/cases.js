@@ -7,7 +7,7 @@ import { favorite } from '../util/favorite';
 export default function Cases() {
     let history = useHistory();
     let { id } = useParams();
-    const { loading, error, data } = useApi(`/api/countries/${id}/cases`);
+    const { error, data } = useApi(`/api/countries/${id}/cases`);
 
     const [liked, setLiked] = useState(favorite.includes(id));
 
@@ -19,11 +19,10 @@ export default function Cases() {
                 setLiked(favorite.toggle(id))
             }}>{liked ? 'liked' : 'not liked'} </button>
             {
-                loading
-                    ? 'loading'
-                    : error
-                        ? 'error'
-                        : <ul>{data?.map(x => <li key={x.date}>{x.date} - {x.death} - {x.confirmed} - {x.recovered}</li>)}</ul>
+                error ? 'error'
+                    : !data ? 'loading' : <ul>
+                        {data?.map(x => <li key={x.date}>{x.date} - {x.death} - {x.confirmed} - {x.recovered}</li>)}
+                    </ul>
             }
         </div>
     );

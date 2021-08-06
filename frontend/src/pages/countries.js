@@ -36,10 +36,10 @@ export default function Countries() {
                 <div>
                     <label>
                         region
-                        {regions.loading
-                            ? 'loading'
-                            : regions.error
-                                ? (<button onClick={regions.refresh} disabled={regions.loading}>refresh</button>)
+                        {regions.error
+                            ? (<button onClick={regions.refresh} disabled={!regions.data}>refresh</button>)
+                            : !regions.data
+                                ? 'loading'
                                 : <select value={region} onChange={v => {
                                     setRegion(v.target.value);
                                     setPage(0);
@@ -111,9 +111,9 @@ export default function Countries() {
 
                 </div>
                 <hr />
-                {countries.loading
-                    ? 'loading'
-                    : countries.error ? 'error'
+                {countries.error ? 'error'
+                    : !countries.data
+                        ? 'loading'
                         : <ul>
                             {
                                 countries.data?.countries?.map(x =>
