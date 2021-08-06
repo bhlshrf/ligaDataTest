@@ -6,29 +6,15 @@ import '../App.css';
 
 import useApi from '../hooks/useApi';
 import { favorite } from '../util/favorite';
+import queryString from '../util/quertString';
 
-const queryString = () => {
-    var objURL = {};
 
-    window.location.search.replace(
-        new RegExp("([^?=&]+)(=([^&]*))?", "g"),
-        function ($0, $1, $2, $3) {
-            objURL[$1] = $3;
-        }
-    );
-
-    return (name, elseValue) => {
-        if (!objURL[name])
-            return elseValue;
-        return decodeURIComponent(objURL[name]) ?? elseValue
-    };
-}
 
 
 export default function Countries() {
-    const query = queryString();
-
     let history = useHistory();
+
+    const query = queryString(history.location);
 
     const [region, setRegion] = useState(query('region', ''))
     const [orderBy, setOrderBy] = useState(query('orderBy', ''));
