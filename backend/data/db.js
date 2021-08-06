@@ -116,7 +116,7 @@ module.exports = function () {
         });
 
         function seed() {
-            const seedData = csvReader('./../data.csv');
+            const seedData = csvReader('./resources/data.csv');
             const regions = onlyUniqe(seedData, 'region');
 
             let country_id = 0, region_id = 0;

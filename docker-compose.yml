@@ -1,17 +1,16 @@
-version: "3"
+version: "3.8"
+
 services:
   backend:
     build:
       context: ./backend/
-    command: /app/node_modules/.bin/nodemon src/index.js
+    command: npm start
     volumes:
       - ./backend/:/app
       - /app/node_modules
     ports:
       - "5000:5000"
-    environment:
-      - NODE_ENV=development
-      - CHOKIDAR_USEPOLLING=true
+
   frontend:
     build:
       context: ./frontend/
@@ -23,3 +22,5 @@ services:
       - backend
     ports:
       - "3000:3000"
+    links:
+      - "backend:be"
