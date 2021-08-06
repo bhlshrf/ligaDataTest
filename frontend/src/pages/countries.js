@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 
 import '../App.css';
@@ -19,7 +19,11 @@ const queryString = () => {
         }
     );
 
-    return (name, elseValue) => decodeURIComponent(objURL[name]) ?? elseValue;
+    return (name, elseValue) => {
+        if (!objURL[name])
+            return elseValue;
+        return decodeURIComponent(objURL[name]) ?? elseValue
+    };
 }
 
 

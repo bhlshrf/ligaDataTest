@@ -10,7 +10,16 @@ function GeneralExceptions(logger) {
     }
 }
 
+
+function parseIntOrDefault(x, defaultValue) {
+    if (!x || x == 'undefined' || isNaN(x))
+        return defaultValue;
+    return parseInt(x);
+}
+
+
 module.exports = {
     NotFoundRoute,
     GeneralExceptions,
+    parseIntOrDefault,
 }

@@ -1,18 +1,23 @@
+const { parseIntOrDefault } = require('./utils');
 
 module.exports = function (db) {
 
     const router = require('express').Router();
 
     router.get('/countries', (req, res) => {
-        const {
-            page = 1,
-            limit = 10,
+        let {
+            page,
+            limit,
 
             orderBy,
             desc,
 
             region_id,
         } = req.query;
+
+        limit = parseIntOrDefault(limit, 10);
+        page = parseIntOrDefault(page, 1);
+        region_id = parseIntOrDefault(region_id);
 
         db.getCountries({
             region_id,

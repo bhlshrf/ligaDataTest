@@ -1,45 +1,33 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import useApi from '../hooks/useApi';
+import { FavoriteContext } from '../util/favorite';
 
-function favoriteItems() {
-    const key = 'likedCountries';
-    const likedCountries = JSON.parse(localStorage.getItem(key)) ?? [];
-
-    return Object.freeze({
-        includes: (id) => likedCountries.includes(id),
-        add: (id) => localStorage.setItem(key, JSON.stringify([...likedCountries, id])),
-        remove: (id) => localStorage.setItem(key, JSON.stringify(likedCountries.filter(x => x != id))),
-    });
-
-}
-
-const storage = favoriteItems();
 
 export default function Cases() {
     let history = useHistory();
     let { id } = useParams();
+
+    const favorite = useContext(FavoriteContext);
+    const [liked, setLiked] = useState(favorite.includes(id));
+
     const { loading, error, data } = useApi(`/api/countries/${id}/cases`);
 
-    const [liked, setLiked] = useState(storage.includes(id));
+
 
     return <div>
-        <h2>Cases</h2>
+        <h2>Cases {data && data[0].country}</h2>
+        <button onClick={() => history.goBack()}>Go Back</button>
         <button onClick={() => {
-            if (!liked)
-                storage.add(id);
-            else
-                storage.remove(id);
-
-            setLiked(!liked)
+            const newValue = favorite.toggle(id)
+            setLiked(newValue)
         }}>{liked ? 'liked' : 'not liked'} </button>
         {
             loading
                 ? 'loading'
                 : error
                     ? 'error'
-                    : <ul>{data?.map(x => <li key={x.date}>{x.date}</li>)}</ul>
+                    : <ul>{data?.map(x => <li key={x.date}>{x.date} - {x.death} - {x.confirmed} - {x.recovered}</li>)}</ul>
         }
-        <button onClick={history.goBack}>Go Back</button>
     </div>;
 }
