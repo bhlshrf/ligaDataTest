@@ -7,6 +7,9 @@ import {
 import Countries from './pages/countries';
 import Cases from './pages/cases';
 
+
+import './style.css';
+
 export default function App() {
   return (
     <Router>

@@ -1,0 +1,217 @@
+.pagination {
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+}
+
+.centered {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.pagination a {
+    border-radius: 5px;
+    color: #17b;
+    background-color: #f0f9ff;
+    float: left;
+    padding: 8px 16px;
+    margin: 4px;
+    text-decoration: none;
+    transition: background-color .3s;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.pagination li.active a {
+    background-color: #17b;
+    color: white;
+}
+
+.pagination li.active a:hover {
+    background-color: rgb(14, 104, 165);
+}
+
+.pagination a:hover:not(li.active a) {
+    background-color: rgb(194, 230, 255);
+}
+
+
+.App {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: #2196F3;
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+
+
+.select {
+    display: inline-block;
+    margin-top: 5px;
+    padding: 0 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: rgb(184, 0, 201);
+    border: none;
+    border-radius: 4px;
+    background-color: rgb(255, 234, 249);
+    height: 34px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+/* .App {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+} */
+
+
+.btn {
+    background-color: rgb(240, 240, 240);
+    color: rgb(77, 77, 77);
+    font-weight: bold;
+    padding: 5px 10px;
+    margin: 5px;
+    height: 34px;
+    width: 100px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: rgb(230, 230, 230);
+}
+
+.liked {
+    background-color: rgb(224 248 231);
+    color: rgb(0 175 9);
+    border: none;
+}
+
+.liked:hover {
+    background-color: rgb(204 228 211);
+}
+
+.error {
+    display: inline-block;
+}
+
+.error-txt {
+    color: red;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.dropDown {
+    display: inline-flex;
+    flex-direction: column;
+    margin: 0 10px;
+}
+
+.return-link:hover {
+    background-color: #eee;
+}
+
+.return-link {
+    color: #333;
+    background-color: #fbfbfb;
+    text-decoration: none;
+    width: 100px;
+    border-radius: 6px;
+    height: 34px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cases-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.row-container {
+    display: flex !important;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    border-radius: 6px;
+    width: 70%;
+    height: 34px;
+}
+
+.row-container:hover {
+    background-color: #f7f7f7;
+}
+
+.cases-content {
+    margin-top: 40px;
+    margin-bottom: 100px;
+}

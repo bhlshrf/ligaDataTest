@@ -8,11 +8,8 @@ import queryString from "../../util/quertString";
 import CountryList from "./CountryList";
 
 
-export default function PaginatedCountryList({ region, orderBy, desc }) {
+export default function PaginatedCountryList({ region, orderBy, desc, limit, page, setPage }) {
     const query = queryString();
-
-    const [limit, setLimit] = useState(parseInt(query('limit', 10)));
-    const [page, setPage] = useState(parseInt(query('page', 0)));
 
     const { error, data, refresh } = useApi(`/api/countries?region_id=${region}` +
         `&orderBy=${orderBy}&desc=${desc}&limit=${limit}&page=${page + 1}`);
@@ -27,18 +24,6 @@ export default function PaginatedCountryList({ region, orderBy, desc }) {
     return (
         <>
             <CountryList items={data.countries} />
-            <DropDown
-                label='items/page'
-                value={limit}
-                items={[5, 10, 20, 30, 50]}
-                onChange={v => {
-                    setLimit(v.target.value);
-
-                    const totalPages = Math.ceil(data?.totalCount / v.target.value) - 1;
-                    if (page > totalPages)
-                        setPage(totalPages);
-                }}
-            />
 
             <ReactPaginate
                 pageCount={data?.totalCount / limit}
@@ -48,10 +33,10 @@ export default function PaginatedCountryList({ region, orderBy, desc }) {
 
                 forcePage={page}
                 initialPage={page}
-                marginPagesDisplayed={1}
-                pageRangeDisplayed={2}
-                previousLabel={'previous'}
-                nextLabel={'next'}
+
+                previousLabel={'<'}
+                nextLabel={'>'}
+
                 breakLabel={'...'}
                 onPageChange={({ selected }) => setPage(selected)}
             />

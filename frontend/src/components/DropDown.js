@@ -1,8 +1,8 @@
 
 const DropDown = ({ label, value, items = [], onChange }) => (
-    <label>
+    <label className='dropDown'>
         {label}
-        <select value={value} onChange={onChange}>
+        <select className='select' value={value} onChange={onChange}>
             {items.map(x => <option key={x.value ?? x} value={x.value ?? x}>{x.label ?? x}</option>)}
         </select>
     </label>

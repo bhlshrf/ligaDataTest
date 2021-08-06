@@ -13,7 +13,7 @@ export default function RegionsDropDown({ region, onChange }) {
 
     return (
         <DropDown
-            label='regions'
+            label='Regions'
             value={region}
             onChange={onChange}
             items={[

@@ -1,8 +1,7 @@
 const DescOrderingCheckbox = ({ isHidden, desc, onChange }) => (
     !isHidden &&
-    <label>
-        desc ordering?
-        <input type='checkbox' checked={desc} onChange={onChange} />
-    </label>
+    <div className='select centered' onClick={() => onChange(!desc)}>
+        <span>{desc ? 'Descending' : 'Ascending'}</span>
+    </div>
 )
 export default DescOrderingCheckbox;

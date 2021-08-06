@@ -1,8 +1,8 @@
 
 const RetryButton = ({ refresh }) => (
-    <div>
-        Something does not add up
-        <button onClick={refresh}>retry</button>
+    <div className='error'>
+        <span className='error-txt'>Something does not add up</span>
+        <button className='btn' onClick={refresh}>retry</button>
     </div>
 )
 
