@@ -1,18 +1,16 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import useApi from '../hooks/useApi';
-import { FavoriteContext } from '../util/favorite';
+import { favorite } from '../util/favorite';
+
 
 
 export default function Cases() {
     let history = useHistory();
     let { id } = useParams();
-
-    const favorite = useContext(FavoriteContext);
-    const [liked, setLiked] = useState(favorite.includes(id));
-
     const { loading, error, data } = useApi(`/api/countries/${id}/cases`);
 
+    const [liked, setLiked] = useState(favorite.includes(id));
 
 
     return <div>

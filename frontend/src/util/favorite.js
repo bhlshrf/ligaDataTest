@@ -11,15 +11,15 @@ export function FavoriteBuilder() {
     });
 
     function add(id) {
-        store([...load(), id]);
+        store([...load().filter(x => x !== id), id]);
     }
 
     function remove(id) {
-        store(load().filter(x => x != id));
+        store(load().filter(x => x !== id));
     }
 
     function includes(id) {
-        return load().includes(id);
+        return load().findIndex(x => x === id) !== -1;
     }
 
     function toggle(id) {
@@ -43,4 +43,6 @@ export function FavoriteBuilder() {
     }
 }
 
-export const FavoriteContext = React.createContext({});
+export const favorite = FavoriteBuilder();
+
+export const FavoriteContext = React.createContext(null);

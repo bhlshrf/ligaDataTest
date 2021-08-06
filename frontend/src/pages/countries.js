@@ -6,9 +6,6 @@ import '../App.css';
 
 import useApi from '../hooks/useApi';
 
-
-
-
 const queryString = () => {
     var objURL = {};
 
@@ -27,7 +24,6 @@ const queryString = () => {
 }
 
 
-
 export default function Countries() {
     const query = queryString();
 
@@ -39,6 +35,7 @@ export default function Countries() {
 
     const [limit, setLimit] = useState(query('limit', 10));
     const [page, setPage] = useState(query('page', 0));
+
 
 
     const regions = useApi('/api/regions');
