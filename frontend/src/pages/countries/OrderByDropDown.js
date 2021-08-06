@@ -1,6 +1,6 @@
-import { useDispatch, useSelector } from "react-redux";
-import DropDown from "../../components/DropDown";
-import { changeOrderBy } from "../../redux/coronaSlice";
+import { useDispatch, useSelector } from 'react-redux';
+import DropDown from '../../components/DropDown';
+import { changeOrderBy } from '../../redux/coronaSlice';
 
 
 export const OrderByDropDown = () => {

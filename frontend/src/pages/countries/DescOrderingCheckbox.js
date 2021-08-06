@@ -1,5 +1,5 @@
-import { useDispatch, useSelector } from "react-redux";
-import { toggleDesc } from "../../redux/coronaSlice";
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleDesc } from '../../redux/coronaSlice';
 
 const DescOrderingCheckbox = () => {
     const desc = useSelector((state) => state.corona.desc);

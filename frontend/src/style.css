@@ -264,3 +264,26 @@ input:checked+.slider:before {
     color: rgb(0, 160, 21);
     background-color: #00f00005;
 }
+
+@media screen and (max-width: 600px) {
+    .header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .case {
+        font-size: 12px;
+    }
+
+    .row-container {
+        width: 100%;
+    }
+
+    .cases-label {
+        flex: 2;
+    }
+
+    div.select.centered {
+        margin: 10px;
+    }
+}

@@ -1,6 +1,6 @@
-import { useDispatch, useSelector } from "react-redux";
-import DropDown from "../../components/DropDown";
-import { changeLimit, changePage } from "../../redux/paginationSlice";
+import { useDispatch, useSelector } from 'react-redux';
+import DropDown from '../../components/DropDown';
+import { changeLimit, changePage } from '../../redux/paginationSlice';
 
 
 export const PageSizeDropDown = () => {

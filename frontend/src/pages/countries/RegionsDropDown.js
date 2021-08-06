@@ -1,11 +1,11 @@
-import Loading from "../../components/Loading";
-import RetryButton from "../../components/RetryButton";
-import DropDown from "../../components/DropDown";
-import { changeRegion } from "../../redux/coronaSlice";
+import Loading from '../../components/Loading';
+import RetryButton from '../../components/RetryButton';
+import DropDown from '../../components/DropDown';
+import { changeRegion } from '../../redux/coronaSlice';
 
 import { useSelector, useDispatch } from 'react-redux'
-import { useEffect } from "react";
-import { fetchRegions } from "../../redux/apiSlice";
+import { useEffect } from 'react';
+import { fetchRegions } from '../../redux/apiSlice';
 
 
 export default function RegionsDropDown() {

@@ -1,11 +1,11 @@
-import { useEffect } from "react";
-import ReactPaginate from "react-paginate";
-import { useDispatch, useSelector } from "react-redux";
-import Loading from "../../components/Loading";
-import RetryButton from "../../components/RetryButton";
-import { fetchCountries } from "../../redux/apiSlice";
-import { changePage } from "../../redux/paginationSlice";
-import CountryList from "./CountryList";
+import { useEffect } from 'react';
+import ReactPaginate from 'react-paginate';
+import { useDispatch, useSelector } from 'react-redux';
+import Loading from '../../components/Loading';
+import RetryButton from '../../components/RetryButton';
+import { fetchCountries } from '../../redux/apiSlice';
+import { changePage } from '../../redux/paginationSlice';
+import CountryList from './CountryList';
 
 
 export default function PaginatedCountryList() {

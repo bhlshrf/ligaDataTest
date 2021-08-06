@@ -3,7 +3,7 @@ const queryString = (location) => {
     var objURL = {};
 
     (location ?? window.location).search.replace(
-        new RegExp("([^?=&]+)(=([^&]*))?", "g"),
+        new RegExp('([^?=&]+)(=([^&]*))?', 'g'),
         function ($0, $1, $2, $3) {
             objURL[$1] = $3;
         }

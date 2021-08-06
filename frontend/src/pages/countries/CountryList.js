@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import CoronaDetails from "../../components/CoronaDetails";
+import { Link } from 'react-router-dom';
+import CoronaDetails from '../../components/CoronaDetails';
 
 const CountryList = ({ items }) => <CoronaDetails
     items={items}

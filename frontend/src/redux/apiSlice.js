@@ -7,13 +7,10 @@ const fetchRegions = createAsyncThunk('api/fetchRegions', () => axios.get(`/api/
 )
 
 const fetchCountries = createAsyncThunk('api/fetchCountries',
-  ({ region, orderBy, desc, limit, page }) => {
-    console.log(region, orderBy, desc, limit, page)
-    return axios.get(
-      `/api/countries?region_id=${region}` +
-      `&orderBy=${orderBy}&desc=${desc}&limit=${limit}&page=${page + 1}`)
-      .then(res => res.data).catch(err => err);
-  }
+  ({ region, orderBy, desc, limit, page }) => axios.get(
+    `/api/countries?region_id=${region}` +
+    `&orderBy=${orderBy}&desc=${desc}&limit=${limit}&page=${page + 1}`)
+    .then(res => res.data).catch(err => err)
 )
 
 

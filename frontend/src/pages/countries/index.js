@@ -6,7 +6,7 @@ import { PageSizeDropDown } from './PageSizeDropDown';
 
 export default function Countries() {
     return (
-        <div className="App">
+        <div className='App'>
             <div className='header'>
                 <RegionsDropDown />
                 <OrderByDropDown />
