@@ -1,8 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
-// import counterReducer from './counter';
+
+import coronaReducer from './coronaSlice';
+import paginationReducer from './paginationSlice';
+import apiReducer from './apiSlice';
+
 
 export const store = configureStore({
     reducer: {
-        // counter: counterReducer
+        corona: coronaReducer,
+        pagination: paginationReducer,
+        api: apiReducer,
     },
 })
