@@ -1,149 +1,134 @@
 import { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 
 import '../App.css';
 
 import useApi from '../hooks/useApi';
-import { favorite } from '../util/favorite';
 import queryString from '../util/quertString';
 
 
+const DropDown = ({ label, value, items = [], onChange }) => (
+    <label>
+        {label}
+        <select value={value} onChange={onChange}>
+            {items.map(x => <option key={x.value ?? x} value={x.value ?? x}>{x.label ?? x}</option>)}
+        </select>
+    </label>
+)
 
+const DescOrderingCheckbox = ({ isHidden, desc, onChange }) => (
+    !isHidden &&
+    <label> desc ordering
+        <input type='checkbox' checked={desc} onChange={onChange} />
+    </label>
+)
+
+
+const RegionsDropDown = ({ region, onChange }) => {
+    const { error, data, refresh } = useApi('/api/regions');
+
+    if (error)
+        return <button onClick={refresh}>refresh</button>
+
+    if (!data)
+        return 'loading';
+
+    return (
+        <DropDown
+            label='regions'
+            value={region}
+            onChange={onChange}
+            items={[
+                { label: 'All regions', value: '' },
+                ...data.map(x => ({ value: x.id, label: x.region }))
+            ]}
+        />
+    )
+}
 
 export default function Countries() {
-    let history = useHistory();
-
-    const query = queryString(history.location);
+    const query = queryString();
 
     const [region, setRegion] = useState(query('region', ''))
     const [orderBy, setOrderBy] = useState(query('orderBy', ''));
     const [desc, setDesc] = useState(false);
 
-    const [limit, setLimit] = useState(query('limit', 10));
-    const [page, setPage] = useState(query('page', 0));
-
-
-
-    const regions = useApi('/api/regions');
-    const countries = useApi(`/api/countries?region_id=${region}` +
-        `&orderBy=${orderBy}&desc=${desc}&limit=${limit}&page=${page + 1}`);
-
-
     return (
         <div className="App">
-            <header className="App-header">
-                <div>
-                    <label>
-                        region
-                        {regions.error
-                            ? (<button onClick={regions.refresh} disabled={!regions.data}>refresh</button>)
-                            : !regions.data
-                                ? 'loading'
-                                : <select value={region} onChange={v => {
-                                    setRegion(v.target.value);
-                                    setPage(0);
+            <div>
+                <RegionsDropDown region={region} onChange={v => setRegion(v.target.value)} />
 
+                <DropDown
+                    label='order by'
+                    value={orderBy}
+                    items={['', 'death', 'confirmed', 'recovered']}
+                    onChange={v => setOrderBy(v.target.value)}
+                />
 
+                <DescOrderingCheckbox desc={desc} isHidden={!orderBy} onChange={v => setDesc(v.target.checked)} />
 
-                                    history.push(
-                                        history.location.pathname + `?region=${v.target.value}&page=${0}&orderBy=${orderBy}&desc=${desc}&limit=${limit}`
-                                    )
-                                }}>
-                                    <option value=''>...</option>
-                                    {regions.data?.map(x => <option key={x.id} value={x.id}>{x.region}</option>)}
-                                </select>
-                        }
-                    </label>
-                    . .
-                    <label>
-                        order by
-                        <select value={orderBy} onChange={v => {
-                            setOrderBy(v.target.value);
-
-                            history.push(
-                                history.location.pathname +
-                                `?region=${region}&page=${page}&orderBy=${v.target.value}&desc=${desc}&limit=${limit}`
-                            )
-                        }}>
-                            <option value=''> nothing </option>
-                            <option value='death'>death</option>
-                            <option value='recovered'>recovered</option>
-                            <option value='confirmed'>confirmed</option>
-                        </select>
-                    </label>
-
-                    {
-                        orderBy && <label> desc ordering
-                            <input type='checkbox' checked={desc} onChange={v => {
-                                setDesc(v.target.checked);
-
-                                history.push(
-                                    history.location.pathname +
-                                    `?region=${region}&page=${page}&orderBy=${orderBy}&desc=${v.target.checked}&limit=${limit}`);
-                            }} />
-                        </label>
-                    }
-
-                    <label>
-                        items/page
-                        <select value={limit} onChange={v => {
-                            setLimit(v.target.value);
-
-                            const totalPages = Math.ceil(countries.data?.totalCount / v.target.value) - 1;
-                            if (page > totalPages)
-                                setPage(totalPages);
-
-
-
-                            history.push(
-                                history.location.pathname + `?region=${region}&page=${page}&orderBy=${orderBy}&desc=${desc}&limit=${v.target.value}`
-                            )
-                        }}>
-                            <option value='5'>5</option>
-                            <option value='10'>10</option>
-                            <option value='20'>20</option>
-                            <option value='30'>30</option>
-                            <option value='50'>50</option>
-                        </select>
-
-                    </label>
-
-                </div>
-                <hr />
-                {countries.error ? 'error'
-                    : !countries.data
-                        ? 'loading'
-                        : <ul>
-                            {
-                                countries.data?.countries?.map(x =>
-                                    <li key={x.id}>
-                                        {favorite.includes(x.id) ? 'x' : '-'}
-                                        <Link to={`/cases/${x.id}`}>{x.country}</Link> - {x.death} - {x.recovered} - {x.confirmed}
-                                    </li>
-                                )}
-                        </ul>
-                }
-
-                {
-                    countries.data?.totalCount && <ReactPaginate
-                        pageCount={countries.data?.totalCount / limit}
-
-                        containerClassName={'pagination'}
-                        activeClassName={'active'}
-
-                        forcePage={page}
-                        marginPagesDisplayed={1}
-                        pageRangeDisplayed={2}
-                        previousLabel={'previous'}
-                        nextLabel={'next'}
-                        breakLabel={'...'}
-                        onPageChange={({ selected }) => setPage(selected)}
-                    />
-                }
-            </header>
+            </div>
+            <hr />
+            <PaginatedCountryList desc={desc} orderBy={orderBy} region={region} />
         </div >
     );
 }
 
+const PaginatedCountryList = ({ region, orderBy, desc }) => {
+    const query = queryString();
 
+    const [limit, setLimit] = useState(parseInt(query('limit', 10)));
+    const [page, setPage] = useState(parseInt(query('page', 0)));
+
+    const { error, data, refresh } = useApi(`/api/countries?region_id=${region}` +
+        `&orderBy=${orderBy}&desc=${desc}&limit=${limit}&page=${page + 1}`);
+
+    if (error)
+        return <button onClick={refresh}>refresh</button>
+
+    if (!data)
+        return 'loading';
+
+    return (
+        <>
+            <CountryList items={data.countries} />
+            <DropDown
+                label='items/page'
+                value={limit}
+                items={[5, 10, 20, 30, 50]}
+                onChange={v => {
+                    setLimit(v.target.value);
+
+                    const totalPages = Math.ceil(data?.totalCount / v.target.value) - 1;
+                    if (page > totalPages)
+                        setPage(totalPages);
+                }}
+            />
+
+            <ReactPaginate
+                pageCount={data?.totalCount / limit}
+
+                containerClassName={'pagination'}
+                activeClassName={'active'}
+
+                forcePage={page}
+                initialPage={page}
+                marginPagesDisplayed={1}
+                pageRangeDisplayed={2}
+                previousLabel={'previous'}
+                nextLabel={'next'}
+                breakLabel={'...'}
+                onPageChange={({ selected }) => setPage(selected)}
+            />
+        </>
+    );
+}
+
+const CountryList = ({ items }) => (
+    <ul>
+        {items.map(x => <li key={x.id}>
+            <Link to={`/cases/${x.id}`}>{x.country}</Link> - {x.death} - {x.recovered} - {x.confirmed}
+        </li>)}
+    </ul>
+)
