@@ -1,4 +1,5 @@
-const { parseIntOrDefault } = require('./utils');
+const { getCountries } = require('../services/covid');
+const { parseIntOrDefault } = require('../utils/helper');
 
 module.exports = function (db) {
 
@@ -8,35 +9,21 @@ module.exports = function (db) {
         let {
             page,
             limit,
-
             orderBy,
             desc,
-
             region_id,
         } = req.query;
 
-        limit = parseIntOrDefault(limit, 10);
-        page = parseIntOrDefault(page, 1);
-        region_id = parseIntOrDefault(region_id);
-
-        db.getCountries({
-            region_id,
-            take: limit,
-            skip: (page - 1) * limit,
+        getCountries({
+            db,
+            region_id: parseIntOrDefault(region_id),
+            limit: parseIntOrDefault(limit, 10),
+            page: parseIntOrDefault(page, 1),
             orderBy,
-            desc: desc?.toLowerCase() == 'true',
-            onResult: countries => {
-                db.getCountriesCount({
-                    region_id,
-                    onResult: count => res.status(200).send({
-                        countries,
-                        totalCount: count,
-                    })
-                })
-            },
+            desc,
+            onResult: (data) => res.status(200).send(data),
         });
     })
-
 
     router.get('/countries/:id/cases', (req, res) => {
         db.getCountryCases({

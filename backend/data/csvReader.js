@@ -5,10 +5,9 @@ module.exports = function (path) {
     return removeRedundantProperties(groupedData);
 }
 
-const fs = require('fs');
-
 function readCsvFile(path) {
-    return fs.readFileSync(path)
+    return require('fs')
+        .readFileSync(path)
         .toString()
         .split('\r\n')
         .slice(1)
@@ -39,8 +38,9 @@ function groupValuesByCountryAndDate(arr) {
             recovered: 0,
         });
 
-        const property = o.name.startsWith('D') ? 'death'
-            : o.name.startsWith('C') ? 'confirmed' : 'recovered';
+        const property = o.name.startsWith('D')
+            ? 'death' : o.name.startsWith('C')
+                ? 'confirmed' : 'recovered';
         item[property] = o.value;
 
         return r.set(key, item);

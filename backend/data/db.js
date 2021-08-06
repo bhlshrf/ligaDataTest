@@ -8,11 +8,11 @@ module.exports = function () {
     initAndSeed();
 
     return Object.freeze({
-        getCountries,
-        getCountryCases,
         getRegions,
-
         getCountriesCount,
+        getCountryCases,
+        getCountries,
+
 
         close: () => db.close(),
     });
@@ -87,6 +87,13 @@ module.exports = function () {
             });
     }
 
+
+
+
+
+    // 
+    // private functions
+    //
 
     function initAndSeed() {
         db.serialize(() => {
