@@ -9,7 +9,7 @@ const expressLogger = expressPino({ logger });
 
 const db = require('./data/db')();
 const covidRoute = require('./routes/covid')(db);
-const { NotFoundRoute, GeneralExceptions } = require('./routes/utils');
+const { NotFoundRoute, GeneralExceptions } = require('./utils/middlewares');
 
 
 app.use(expressLogger);

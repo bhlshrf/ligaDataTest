@@ -1,4 +1,4 @@
-export function getCountries({ db, region_id, limit, page, orderBy, desc, onResult }) {
+module.exports.getCountries = function ({ db, region_id, limit, page, orderBy, desc, onResult }) {
     db.getCountries({
         region_id,
         take: limit,
@@ -16,3 +16,4 @@ export function getCountries({ db, region_id, limit, page, orderBy, desc, onResu
         },
     });
 }
+
