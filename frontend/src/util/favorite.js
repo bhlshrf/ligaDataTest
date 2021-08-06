@@ -1,7 +1,6 @@
-import React from "react";
 
-export function FavoriteBuilder() {
-    const key = 'likedCountries';
+function FavoriteBuilder() {
+    const key = 'likedCountriesIDs';
 
     return Object.freeze({
         includes,
@@ -11,7 +10,7 @@ export function FavoriteBuilder() {
     });
 
     function add(id) {
-        store([...load().filter(x => x !== id), id]);
+        store([...(load().filter(x => x !== id)), id]);
     }
 
     function remove(id) {
@@ -19,7 +18,7 @@ export function FavoriteBuilder() {
     }
 
     function includes(id) {
-        return load().findIndex(x => x === id) !== -1;
+        return load().includes(id);
     }
 
     function toggle(id) {
@@ -33,16 +32,13 @@ export function FavoriteBuilder() {
         }
     }
 
-
     function load() {
         return JSON.parse(localStorage.getItem(key)) ?? [];
     }
 
     function store(data) {
-        localStorage.setItem(key, JSON.stringify(data));
+        localStorage.setItem(key, JSON.stringify(data ?? []));
     }
 }
 
 export const favorite = FavoriteBuilder();
-
-export const FavoriteContext = React.createContext(null);

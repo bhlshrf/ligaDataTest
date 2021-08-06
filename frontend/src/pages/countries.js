@@ -5,6 +5,7 @@ import ReactPaginate from 'react-paginate';
 import '../App.css';
 
 import useApi from '../hooks/useApi';
+import { favorite } from '../util/favorite';
 
 const queryString = () => {
     var objURL = {};
@@ -131,6 +132,7 @@ export default function Countries() {
                             {
                                 countries.data?.countries?.map(x =>
                                     <li key={x.id}>
+                                        {favorite.includes(x.id) ? 'x' : '-'}
                                         <Link to={`/cases/${x.id}`}>{x.country}</Link> - {x.death} - {x.recovered} - {x.confirmed}
                                     </li>
                                 )}

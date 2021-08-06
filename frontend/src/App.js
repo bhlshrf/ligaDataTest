@@ -1,8 +1,7 @@
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from 'react-router-dom';
 
 import Countries from './pages/countries';
@@ -12,8 +11,8 @@ export default function App() {
   return (
     <Router>
       <Switch>
-        <Route path='/cases/:id'> <Cases /> </Route>
-        <Route path='/'><Countries /> </Route>
+        <Route path='/cases/:id' component={Cases} />
+        <Route path='/coutries' component={Countries} />
       </Switch>
     </Router>
   );
