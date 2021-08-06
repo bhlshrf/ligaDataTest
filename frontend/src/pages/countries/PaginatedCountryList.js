@@ -8,7 +8,7 @@ import queryString from "../../util/quertString";
 import CountryList from "./CountryList";
 
 
-export default PaginatedCountryList = ({ region, orderBy, desc }) => {
+export default function PaginatedCountryList({ region, orderBy, desc }) {
     const query = queryString();
 
     const [limit, setLimit] = useState(parseInt(query('limit', 10)));

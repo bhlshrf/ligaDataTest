@@ -1,5 +1,5 @@
 
-export default DropDown = ({ label, value, items = [], onChange }) => (
+const DropDown = ({ label, value, items = [], onChange }) => (
     <label>
         {label}
         <select value={value} onChange={onChange}>
@@ -7,3 +7,5 @@ export default DropDown = ({ label, value, items = [], onChange }) => (
         </select>
     </label>
 )
+
+export default DropDown;

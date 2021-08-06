@@ -1,5 +1,6 @@
-export default Loading = () => (
+const Loading = () => (
     <span>
         loading . . .
     </span>
 )
+export default Loading;

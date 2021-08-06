@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import LikableButton from '../components/LikableButton';
+import Loading from '../components/Loading';
 import RetryButton from '../components/RetryButton';
 import useApi from '../hooks/useApi';
 

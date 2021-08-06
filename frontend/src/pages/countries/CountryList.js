@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default CountryList = ({ items }) => (
+const CountryList = ({ items }) => (
     <ul>
         {items.map(x => <li key={x.id}>
             <Link to={`/cases/${x.id}`}>
@@ -10,3 +10,5 @@ export default CountryList = ({ items }) => (
         </li>)}
     </ul>
 )
+
+export default CountryList;

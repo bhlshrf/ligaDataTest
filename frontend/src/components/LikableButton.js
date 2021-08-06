@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { favorite } from '../util/favorite';
 
 
-export default LikableButton = ({ id }) => {
+export default function LikableButton({ id }) {
     const [liked, setLiked] = useState(favorite.includes(id));
 
     return (
